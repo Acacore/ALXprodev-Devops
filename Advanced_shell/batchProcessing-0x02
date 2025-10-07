@@ -4,32 +4,47 @@ pokemon_names=("bulbasaur" "ivysaur" "venusaur" "charmander" "charmeleon")
 
 mkdir -p pokemon_data
 
+
+#Loop throug Pokenom names
 for name in "${pokemon_names[@]}"
 do
     lowercase_name=$(echo "$name" | tr '[:upper:]' '[:lower:]')
     file_name="pokemon_data/${lowercase_name}.json"
-
     request="https://pokeapi.co/api/v2/pokemon/$lowercase_name"
 
     echo "Fetching data for $name..."
 
-    # Make request and store response
+    max_retries=3
+    success=false
 
-    HTTP_STATUS=$(curl -s -o "$file_name" -w "%{http_code}" "$request")
+    for ((attempt=1; attempt<=max_retries; attempt++))
+    do
+        # Make request and store response
+
+        HTTP_STATUS=$(curl -s -o "$file_name" -w "%{http_code}" "$request")
     
 
-    if [ "$HTTP_STATUS" -eq 200 ]
+        if [ "$HTTP_STATUS" -eq 200 ]
+            then
+                echo "Saved data to $file_name ... ✅"
+                success=true
+                break
+        
+        else
+            echo "Error Fetching data for $lowercase_name ..."
+            echo "$name - $HTTP_STATUS" >> errors.txt
+            rm -f "$file_name"
+            sleep 2
+        fi
+
+
+    done
+
+    if [ "$success" = false ];
         then
-        echo "Saved data to $file_name ... ✅"
-       
-    else
-        echo "Error Fetching data for $lowercase_name ..."
-        echo "$name - $HTTP_STATUS" >> errors.txt
-        rm -f "$file_name"
-
+            echo "Failed to fetch data for $name after $max_retries attempt." >> errors.txt
     fi
-    sleep 2
-
+            sleep 2
 done
 
 
