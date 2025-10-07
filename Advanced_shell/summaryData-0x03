@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Define a folder containing JSON data
+file_data = "./pokemon_data"
+
+# Define CSV report file
+report_file="pokemon_report.csv"
+
+# Create or overwrite the CVS file, then add a header line
+echo "Name,Height,Weight"> "$report_file"
+
+for file in "$file_data"/*.json
+    do
+        if [ -f "$file" ]
+        then
+            name=$(jq -r '.name' "$file_data")
+            height=$(jq -r '.height' "$file_data")
+            weight=$(jq -r '.weight' "$file_data")
+            
+            echo "$name,$height,$weight" >> "$report_file"
+    
+        else
+            then
+                echo "error fethcing Data in $file_data"
+
+        fi
+
+done
+
+awk -F',' '
+NR > 1 {
+    total_height += $2
+    total_weight += $3
+    count++
+}
+END {
+    avg_height = total_height / count
+    avg_weight = total_weight / count
+    printf "Average height: %.2f\nAverage weight: %.2f\n", avg_height, avg_weight
+}' "$report_file"
+
+echo "Report genereated: $report_file ✅"
