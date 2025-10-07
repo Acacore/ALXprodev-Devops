@@ -2,7 +2,7 @@
 
 URL="https://pokeapi.co/api/v2/pokemon/pikachu"
 OUTPUT="data.json"
-ERROR_FILE="error.txt"
+ERROR_FILE="errors.txt"
 
 
 # Make API request silently and save HTTP status
