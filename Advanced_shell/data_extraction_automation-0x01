@@ -10,10 +10,18 @@ then
 fi
 
 #Extacht data using jq
-name=$(jq -r '.name' "$DATA_FILE")
-formatted_height=$(jq -r '.height' "$DATA_FILE")
-formatted_weight=$(jq -r '.weight' "$DATA_FILE")
-type=$(jq -r '.types[0].type.name' "$DATA_FILE")
+NAME=$(jq -r '.name' "$DATA_FILE")
+HEIGHT=$(jq -r '.height' "$DATA_FILE")
+WEIGHT=$(jq -r '.weight' "$DATA_FILE")
+TYPE=$(jq -r '.types[0].type.name' "$DATA_FILE")
 
+# Convert decimeters -> meters and hectograms -> kilograms using awk
+formated_height=$(echo "$HEIGHT" | awk '{printf "%.f", $1 /10}')
+formated_weight=$(echo "$WEIGHT" | awk '{printf "%.f", $1 /10}')
 
-echo "${name^} is of type ${type^}, weights ${formatted_height}kg, and is ${formatted_weight}m tall"
+#Capitalize first letter using sed 
+name=$(echo "$name" | sed 's/.*/\u&/')
+type=$(echo "$type" | sed 's/.*/u&/')
+
+# Print formatted sentence
+echo "${name^} is of type ${type^}, weights ${formated_weight}kg, and is ${formated_height}m tall"
