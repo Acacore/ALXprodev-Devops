@@ -20,8 +20,8 @@ formated_height=$(echo "$HEIGHT" | awk '{printf "%.f", $1 /10}')
 formated_weight=$(echo "$WEIGHT" | awk '{printf "%.f", $1 /10}')
 
 #Capitalize first letter using sed 
-name=$(echo "$name" | sed 's/.*/\u&/')
-type=$(echo "$type" | sed 's/.*/u&/')
+name=$(echo "$NAME" | sed 's/.*/\u&/')
+type=$(echo "$TYPE" | sed 's/.*/u&/')
 
 # Print formatted sentence
 echo "${name^} is of type ${type^}, weights ${formated_weight}kg, and is ${formated_height}m tall"
