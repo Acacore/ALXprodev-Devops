@@ -1,0 +1,36 @@
+#!bin/bash
+
+pokemon_names=("Bulbasaur" "Ivysaur" "Venusaur" "Charmander" "Charmeleon")
+
+mkdir -p pokemon_data
+
+for name in "${pokemon_names[@]}"
+do
+    lowercase_name=$(echo "$name" | tr '[:upper:]' '[:lower:]')
+    file_name="pokemon_data/${lowercase_name}.json"
+
+    request="https://pokeapi.co/api/v2/pokemon/$lowercase_name"
+
+    echo "Fetching data for $name..."
+
+    # Make request and store response
+
+    HTTP_STATUS=$(curl -s -o "$file_name" -w "%{http_code}" "$request")
+    
+
+    if [ "$HTTP_STATUS" -eq 200 ]
+        then
+        echo "Saved data to $file_name ... ✅"
+       
+    else
+        echo "Error Fetching data for $lowercase_name ..."
+        echo "$name - $HTTP_STATUS" >> errors.txt
+        rm -f "$file_name"
+
+    fi
+    sleep 2
+
+done
+
+
+echo "All Pokenom data fetched successfuly!"
