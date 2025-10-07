@@ -22,7 +22,7 @@ do
         # Make request and store response
 
         HTTP_STATUS=$(curl -s -o "$file_name" -w "%{http_code}" "$request")
-    
+        
 
         if [ "$HTTP_STATUS" -eq 200 ]
             then

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+pokemon_names=("Bulbasaur" "Ivysaur" "Venusaur" "Charmander" "Charmeleon")
+api_base="https://pokeapi.co/api/v2/pokemon/"
+folder="pokemon_data"
+
+if [ ! -d $folder ]
+    then 
+        mkdir $folder
+fi
+
+for name in "${pokemon_names[@]}"
+    do
+        lowercase_name=$(echo "$name" | tr '[:upper:]' '[:lower:]')
+        echo $name >> "$folder$lowercase_name.json"
+        echo "Fetching data for $name..."
+        
+        # Run curl in background (&)
+        curl -s "${api_base}/${lowercase_name}" -o "${folder}/${lowercase_name}.json"&
+    done
+
+# wait for all background jobs to finish
+wait 
+
+echo "All Pokenom data fetched successfuly!"
+
+for name in "${pokemon_names[@]}"
+    do
+        lowercase_name=$(echo "$name" | tr '[:upper:]' '[:lower:]')
+        if [ -s "$folder/$lowercase_name.json" ]
+            then
+                echo "Data Fetch with success"
+        else
+            echo "$name: Error - data not fetched"
+        
+        fi
+done
