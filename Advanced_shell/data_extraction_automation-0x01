@@ -1,3 +1,19 @@
 #!/bin/bash
 
-URL
+#path to data file
+DATA_FILE="data.json"
+
+if [ ! -f "$DATA_FILE" ]
+then
+    echo "Error:$DATA_FILE not found"
+    exit 1
+fi
+
+#Extacht data using jq
+NAME=$(jq -r '.name' "$DATA_FILE")
+HEIGHT=$(jq -r '.height' "$DATA_FILE")
+WEIGHT=$(jq -r '.weight' "$DATA_FILE")
+TYPE=$(jq -r '.types[0].type.name' "$DATA_FILE")
+
+
+echo "${NAME^} is of type ${TYPE^}, weights ${WEIGHT}kg, and is ${HEIGHT}m tall"
