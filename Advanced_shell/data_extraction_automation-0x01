@@ -10,10 +10,10 @@ then
 fi
 
 #Extacht data using jq
-NAME=$(jq -r '.name' "$DATA_FILE")
-HEIGHT=$(jq -r '.height' "$DATA_FILE")
-WEIGHT=$(jq -r '.weight' "$DATA_FILE")
-TYPE=$(jq -r '.types[0].type.name' "$DATA_FILE")
+name=$(jq -r '.name' "$DATA_FILE")
+formatted_height=$(jq -r '.height' "$DATA_FILE")
+formatted_weight=$(jq -r '.weight' "$DATA_FILE")
+type=$(jq -r '.types[0].type.name' "$DATA_FILE")
 
 
-echo "${NAME^} is of type ${TYPE^}, weights ${WEIGHT}kg, and is ${HEIGHT}m tall"
+echo "${name^} is of type ${type^}, weights ${formatted_height}kg, and is ${formatted_weight}m tall"
