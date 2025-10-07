@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define a folder containing JSON data
-file_data = "./pokemon_data"
+file_data="./pokemon_data"
 
 # Define CSV report file
 report_file="pokemon_report.csv"
@@ -10,18 +10,18 @@ report_file="pokemon_report.csv"
 echo "Name,Height,Weight"> "$report_file"
 
 for file in "$file_data"/*.json
-    do
+    do 
         if [ -f "$file" ]
         then
-            name=$(jq -r '.name' "$file_data")
-            height=$(jq -r '.height' "$file_data")
-            weight=$(jq -r '.weight' "$file_data")
+            name=$(jq -r '.name' "$file")
+            height=$(jq -r '.height' "$file")
+            weight=$(jq -r '.weight' "$file")
+            echo "$name is present"
             
             echo "$name,$height,$weight" >> "$report_file"
     
         else
-            then
-                echo "error fethcing Data in $file_data"
+            echo "error fethcing Data in $file"
 
         fi
 
@@ -34,8 +34,8 @@ NR > 1 {
     count++
 }
 END {
-    avg_height = total_height / count
-    avg_weight = total_weight / count
+    avg_height = (count == 0 ? 0 : total_height / count)
+    avg_weight = (count == 0 ? 0 : total_weight / count)
     printf "Average height: %.2f\nAverage weight: %.2f\n", avg_height, avg_weight
 }' "$report_file"
 
